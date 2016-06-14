@@ -34,7 +34,7 @@ typedef struct Model
 //Get the OBJ info
 Model GetOBJInfo(string value)
 {
-	cout << "Get OBJ Info \n" << endl;
+	cout << "Get OBJ Info for " << value << endl;
 
     Model model;
 
@@ -74,9 +74,9 @@ Model GetOBJInfo(string value)
 }
 
 //Get the obj Data
-void GetOBJData(string file, float positions[][3], float texels[][2], float normals[][3], int faces[][6])
+void GetOBJData(string file, float** positions, float** texels, float** normals, int** faces, Model model)
 {
-	cout << "Get OBJ data \n" << endl;
+	cout << "Get OBJ data for " << file << endl;
 
     int pCount, tCount, nCount, fCount = 0;
 
@@ -96,7 +96,7 @@ void GetOBJData(string file, float positions[][3], float texels[][2], float norm
         getline(stream, line);
         string type = line.substr(0, 2);
 
-        if(type.compare("v ") == 0 && positions != NULL)
+        if(type.compare("v ") == 0 && positions != NULL && pCount < model.positions)
         {
             //Copy the entire line
             char* l = new char[line.size() + 1];
@@ -111,7 +111,7 @@ void GetOBJData(string file, float positions[][3], float texels[][2], float norm
             pCount++;
         }
 
-        else if(type.compare("vt") == 0 && texels != NULL)
+        else if(type.compare("vt") == 0 && texels != NULL && tCount < model.texels)
         {
         	//Copy the entire line
 			char* l = new char[line.size() + 1];
@@ -126,7 +126,7 @@ void GetOBJData(string file, float positions[][3], float texels[][2], float norm
 			tCount++;
         }
 
-        else if(type.compare("vn") == 0 && normals != NULL)
+        else if(type.compare("vn") == 0 && normals != NULL && nCount < model.normals)
         {
             //Copy the entire line
             char* l = new char[line.size() + 1];
@@ -141,7 +141,7 @@ void GetOBJData(string file, float positions[][3], float texels[][2], float norm
             nCount++;
         }
 
-        else if(type.compare("f ") == 0 && faces != NULL)
+        else if(type.compare("f ") == 0 && faces != NULL && fCount < model.faces)
         {
             //Copy the entire line
             char* l = new char[line.size() + 1];
@@ -165,85 +165,326 @@ int main(int argc, const char * argv[])
 {
     int fileCounter = 0;
 
-    // insert code here...
-    cout << "Hello, World!\n";
-    cout << argc << endl;
-    cout << argv[0] << endl; //Inline argument for file path
-    cout << argv[1] << endl; //Inline argument for file name
-    cout <<"\n" <<endl;
+    bool isPositions, isTexels, isNormals, isFaces = false;
+
+    //AFib1 arrays
+    float** AFib1_Positions;
+    float** AFib1_Texels; 
+    float** AFib1_Normals;
+    int** AFib1_Faces;
+
+    //AFib2 Arrays
+    float** AFib2_Positions;
+    float** AFib2_Texels;
+    float** AFib2_Normals;
+    int** AFib2_Faces;
+
+    //AFib3 Arrays
+    float** AFib3_Positions;
+    float** AFib3_Texels;
+    float** AFib3_Normals;
+    int** AFib3_Faces;
+     
 
     //Creating file setup
-    string name = argv[1];
-    string fileOBJPath = "source/" + name + ".obj";
-    string fileHeaderPath = "product/" + name + ".h";
-    string fileClassPath = "product/" + name + ".c";
+    string sourceNames[] = {"AFib1", "AFib2", "AFib3"};
+    string name, fileOBJPath;
 
-    Model model = GetOBJInfo(fileOBJPath);
-    Model tempModel;
-    fileCounter++;
-
-    //check to see the numbers
-    cout << "OBJ Info" << endl;
-    cout << "Positions: " << model.positions << endl;
-    cout << "Texels: " << model.texels << endl;
-    cout << "Normals: " << model.normals << endl;
-    cout << "Faces: " << model.faces << endl;
-    cout << "Vertices: " << model.verticies << endl;
-    cout <<"\n" <<endl;
-
-    //delcare the arrary based on the model data
-    if(model.positions != 0 && model.texels != 0 && model.normals != 0 && model.faces != 0 && model.verticies != 0)
+    while(fileCounter < 3)
     {
-    	cout << "Got all data \n" << endl;
+        name = sourceNames[fileCounter];
+        fileOBJPath = "source/" + name + ".obj";
 
-    	float positions[model.positions][3]; //each coordinate in XYZ space
-    	float texels[model.texels][2]; //UV coordinates
-    	float normals[model.normals][3]; //normal vector
-    	int faces[model.faces][6];
+        Model model = GetOBJInfo(fileOBJPath);
 
-    	GetOBJData(fileOBJPath, positions, texels, normals, faces);
-
-        //Check to see correctness of the data -- Checking the first entry
-        cout << "Model Data" << endl;
-        cout << "Position: " << positions[0][0] << "x " << positions[0][1] << "y " << positions[0][2] << "z" << endl;
-        cout << "Texels: " << texels[0][0] << "u " << texels[0][1] << "v " << endl;
-        cout << "Normals: " << normals[0][0] << "x " << normals[0][1] << "y " << normals[0][2] << "z" << endl;
-        cout << "Faces: "<< faces[0][0] << "p " << faces[0][1] << "t " << faces[0][2] << "n" << endl;
+        //check to see the numbers
+        cout << "OBJ Info" << endl;
+        cout << "Positions: " << model.positions << endl;
+        cout << "Texels: " << model.texels << endl;
+        cout << "Normals: " << model.normals << endl;
+        cout << "Faces: " << model.faces << endl;
+        cout << "Vertices: " << model.verticies << endl;
         cout <<"\n" <<endl;
-    }
-    else if(model.positions != 0 && model.texels != 0 && model.faces != 0)
-    {
-    	cout << "Missing normals \n" << endl;
 
-    	float positions[model.positions][3]; //each coordinate in XYZ space
-    	float texels[model.texels][2]; //UV coordinates
-    	int faces[model.faces][6];
+        //delcare the arrary based on the model data
+        if(model.positions != 0 && model.texels != 0 && model.normals != 0 && model.faces != 0 && model.verticies != 0)
+        {
+            isPositions, isTexels, isNormals, isFaces = true;
 
-    	GetOBJData(fileOBJPath, positions, texels, NULL, faces);
+        	cout << "Got all data \n" << endl;
 
-    	//Check to see correctness of the data -- Checking the first entry
-		cout << "Model Data" << endl;
-		cout << "Position: " << positions[0][0] << "x " << positions[0][1] << "y " << positions[0][2] << "z" << endl;
-		cout << "Texels: " << texels[0][0] << "u " << texels[0][1] << "v " << endl;
-		cout << "Faces: "<< faces[0][0] << "p " << faces[0][1] << "t " << faces[0][2] << "n" << endl;
-		cout <<"\n" <<endl;
-    }
-    else if(model.positions != 0 && model.normals != 0 && model.faces != 0)
-    {
-    	cout << "Missing texels \n" << endl;
+            float** positions = new float*[model.positions]; //each coordinate in XYZ space
+            for(int i = 0; i < model.positions; i++)
+            {
+                positions[i] = new float[3];
+                for(int j = 0; j < 3; j++)
+                {
+                    positions[i][j] = rand() % (9 - 0 + 1) + 0;
+                }
 
-    	float positions[model.positions][3]; //each coordinate in XYZ space
-		float normals[model.normals][3]; //normal vector
-		int faces[model.faces][6]; //faces
+            }
 
-		GetOBJData(fileOBJPath, positions, NULL, normals, faces);
+            float** texels = new float*[model.texels]; //UV coordinates
+            for(int i = 0; i < model.texels; i++)
+            {
+                texels[i] = new float[2];
+                for(int j = 0; j < 2; j++)
+                {
+                    texels[i][j] = rand() % (9 - 0 + 1) + 0;
+                }
+            }
 
-		//Check to see correctness of the data -- Checking the first entry
-		cout << "Model Data" << endl;
-		cout << "Position: " << positions[0][0] << "x " << positions[0][1] << "y " << positions[0][2] << "z" << endl;
-		cout << "Normals: " << normals[0][0] << "x " << normals[0][1] << "y " << normals[0][2] << "z" << endl;
-		cout << "Faces: "<< faces[0][0] << "p " << faces[0][1] << "t " << faces[0][2] << "n" << endl;
-		cout <<"\n" <<endl;
+            float** normals = new float*[model.normals]; //normal vector
+            for(int i = 0; i < model.normals; i++)
+            {
+                normals[i] = new float[3];
+                for(int j = 0; j < 3; j++)
+                {
+                    normals[i][j] = rand() % (9 - 0 + 1) + 0;
+                }
+            }
+
+            int** faces = new int*[model.faces];
+            for(int i = 0; i < model.faces; i++)
+            {
+                faces[i] = new int[6];
+                for(int j = 0; j < 6; j++)
+                {
+                    faces[i][j] = rand() % (9 - 0 + 1) + 0;
+                }
+            }
+
+        	GetOBJData(fileOBJPath, positions, texels, normals, faces, model); 
+
+            //Check to see correctness of the data -- Checking the first entry
+            cout << "Model Data" << endl;
+            cout << "Position: " << positions[0][0] << "x " << positions[0][1] << "y " << positions[0][2] << "z" << endl;
+            cout << "Texels: " << texels[0][0] << "u " << texels[0][1] << "v " << endl;
+            cout << "Normals: " << normals[0][0] << "x " << normals[0][1] << "y " << normals[0][2] << "z" << endl;
+            cout << "Faces: "<< faces[0][0] << "p " << faces[0][1] << "t " << faces[0][2] << "n" << endl;
+            cout <<"\n" <<endl;
+
+            //Assign values to the global arrays to compute average coordinates
+            if(name == "AFib1")
+            {
+                AFib1_Positions = positions;
+                AFib1_Texels = texels;
+                AFib1_Normals = normals;
+                AFib1_Faces = faces;
+            }
+            else if(name == "AFib2")
+            {
+                AFib2_Positions = positions;
+                AFib2_Texels = texels;
+                AFib2_Normals = normals;
+                AFib2_Faces = faces;
+            }
+            else if(name == "AFib3")
+            {
+                AFib3_Positions = positions;
+                AFib3_Texels = texels;
+                AFib3_Normals = normals;
+                AFib3_Faces = faces;
+            }
+
+            //Deallocate the memory spaces
+            for(int i = 0; i < model.positions; i++)
+            {
+                delete[] positions[i];
+            }
+            delete[] positions;
+
+            for(int i = 0; i < model.texels; i++)
+            {
+                delete[] texels[i];
+            }
+            delete[] texels;
+
+            for(int i = 0; i < model.normals; i++)
+            {
+                delete[] normals[i];
+            }
+            delete[] normals;
+
+            for(int i = 0; i < model.faces; i++)
+            {
+                delete[] faces[i];
+            }
+            delete[] faces;
+        }
+        else if(model.positions != 0 && model.texels != 0 && model.faces != 0)
+        {
+            isPositions, isTexels, isFaces = true;
+
+        	cout << "Missing normals \n" << endl;
+
+            float** positions = new float*[model.positions]; //each coordinate in XYZ space
+            for(int i = 0; i < model.positions; i++)
+            {
+                positions[i] = new float[3];
+                for(int j = 0; j < 3; j++)
+                {
+                    positions[i][j] = rand() % (9 - 0 + 1) + 0;
+                }
+
+            }
+
+        	float** texels = new float*[model.texels]; //UV coordinates
+            for(int i = 0; i < model.texels; i++)
+            {
+                texels[i] = new float[2];
+                for(int j = 0; j < 2; j++)
+                {
+                    texels[i][j] = rand() % (9 - 0 + 1) + 0;
+                }
+            }
+
+        	int** faces = new int*[model.faces];
+            for(int i = 0; i < model.faces; i++)
+            {
+                faces[i] = new int[6];
+                for(int j = 0; j < 6; j++)
+                {
+                    faces[i][j] = rand() % (9 - 0 + 1) + 0;
+                }
+            }
+
+        	GetOBJData(fileOBJPath, positions, texels, NULL, faces, model);
+
+        	//Check to see correctness of the data -- Checking the first entry
+    		cout << "Model Data" << endl;
+    		cout << "Position: " << positions[0][0] << "x " << positions[0][1] << "y " << positions[0][2] << "z" << endl;
+    		cout << "Texels: " << texels[0][0] << "u " << texels[0][1] << "v " << endl;
+    		cout << "Faces: "<< faces[0][0] << "p " << faces[0][1] << "t " << faces[0][2] << "n" << endl;
+    		cout <<"\n" <<endl;
+
+            //Assign values to the global arrays to compute average coordinates
+            if(name == "AFib1")
+            {
+                AFib1_Positions = positions;
+                AFib1_Texels = texels;
+                AFib1_Faces = faces;
+            }
+            else if(name == "AFib2")
+            {
+                AFib2_Positions = positions;
+                AFib2_Texels = texels;
+                AFib2_Faces = faces;
+            }
+            else if(name == "AFib3")
+            {
+                AFib3_Positions = positions;
+                AFib3_Texels = texels;
+                AFib3_Faces = faces;
+            }
+
+
+            //Deallocate the memory spaces
+            for(int i = 0; i < model.positions; i++)
+            {
+                delete[] positions[i];
+            }
+            delete[] positions;
+
+            for(int i = 0; i < model.texels; i++)
+            {
+                delete[] texels[i];
+            }
+            delete[] texels;
+
+            for(int i = 0; i < model.faces; i++)
+            {
+                delete[] faces[i];
+            }
+            delete[] faces;
+
+        }
+        else if(model.positions != 0 && model.normals != 0 && model.faces != 0)
+        {
+            isPositions, isNormals, isFaces = true;
+
+        	cout << "Missing texels \n" << endl;
+
+            float** positions = new float*[model.positions]; //each coordinate in XYZ space
+            for(int i = 0; i < model.positions; i++)
+            {
+                positions[i] = new float[3];
+                for(int j = 0; j < 3; j++)
+                {
+                    positions[i][j] = rand() % (9 - 0 + 1) + 0;
+                }
+
+            }
+
+            float** normals = new float*[model.normals]; //normal vector
+            for(int i = 0; i < model.normals; i++)
+            {
+                normals[i] = new float[3];
+                for(int j = 0; j < 3; j++)
+                {
+                    normals[i][j] = rand() % (9 - 0 + 1) + 0;
+                }
+            }
+
+            int** faces = new int*[model.faces];
+            for(int i = 0; i < model.faces; i++)
+            {
+                faces[i] = new int[6];
+                for(int j = 0; j < 6; j++)
+                {
+                    faces[i][j] = rand() % (9 - 0 + 1) + 0;
+                }
+            }
+
+    		GetOBJData(fileOBJPath, positions, NULL, normals, faces, model); 
+
+    		//Check to see correctness of the data -- Checking the first entry
+    		cout << "Model Data" << endl;
+    		cout << "Position: " << positions[0][0] << "x " << positions[0][1] << "y " << positions[0][2] << "z" << endl;
+    		cout << "Normals: " << normals[0][0] << "x " << normals[0][1] << "y " << normals[0][2] << "z" << endl;
+    		cout << "Faces: "<< faces[0][0] << "p " << faces[0][1] << "t " << faces[0][2] << "n" << endl;
+    		cout <<"\n" <<endl;
+
+            //Assign values to the global arrays to compute average coordinates
+            if(name == "AFib1")
+            {
+                AFib1_Positions = positions;
+                AFib1_Normals = normals;
+                AFib1_Faces = faces;
+            }
+            else if(name == "AFib2")
+            {
+                AFib2_Positions = positions;
+                AFib2_Normals = normals;
+                AFib2_Faces = faces;
+            }
+            else if(name == "AFib3")
+            {
+                AFib3_Positions = positions;
+                AFib3_Normals = normals;
+                AFib3_Faces = faces;
+            }
+
+            //Deallocate the memory spaces
+            for(int i = 0; i < model.positions; i++)
+            {
+                delete[] positions[i];
+            }
+            delete[] positions;
+
+            for(int i = 0; i < model.normals; i++)
+            {
+                delete[] normals[i];
+            }
+            delete[] normals;
+
+            for(int i = 0; i < model.faces; i++)
+            {
+                delete[] faces[i];
+            }
+            delete[] faces;
+        }
+        fileCounter++;
     }
 
     return 0;
