@@ -1,0 +1,1189 @@
+//============================================================================
+// Name        : VR.cpp
+// Author      : Ramesh
+// Version     :
+// Copyright   : Your copyright notice
+// Description : C++, Ansi-style
+//============================================================================
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cstring>
+using namespace std;
+
+//Model structure
+typedef struct Model
+{
+    int verticies;
+    int positions;
+    int texels;
+    int normals;
+    int faces;
+
+    Model()
+    {
+    	verticies = 0;
+    	positions = 0;
+    	texels = 0;
+    	normals = 0;
+    	faces = 0;
+    }
+}Model;
+
+//AFib1 Array structure
+typedef struct AFib1_Arrays
+{
+    //g _010_140
+    float** Positions_010_140;
+    float** Texels_010_140; 
+    float** Normals_010_140;
+    int** Faces_010_140;
+
+    //g _030-040
+    float** Positions_030_040;
+    float** Texels_030_040; 
+    float** Normals_030_040;
+    int** Faces_030_040;
+
+    //g _040-050
+    float** Positions_040_050;
+    float** Texels_040_050; 
+    float** Normals_040_050;
+    int** Faces_040_050;
+
+    //g _050-060
+    float** Positions_050_060;
+    float** Texels_050_060; 
+    float** Normals_050_060;
+    int** Faces_050_060;
+
+    //g _060-070
+    float** Positions_060_070;
+    float** Texels_060_070; 
+    float** Normals_060_070;
+    int** Faces_060_070;
+
+    //g _070-080
+    float** Positions_070_080;
+    float** Texels_070_080; 
+    float** Normals_070_080;
+    int** Faces_070_080;
+
+    //g _080-090
+    float** Positions_080_090;
+    float** Texels_080_090; 
+    float** Normals_080_090;
+    int** Faces_080_090;
+
+    //g _090-100
+    float** Positions_090_100;
+    float** Texels_090_100; 
+    float** Normals_090_100;
+    int** Faces_090_100;
+
+    //g _100-110
+    float** Positions_100_110;
+    float** Texels_100_110; 
+    float** Normals_100_110;
+    int** Faces_100_110;
+
+    //g _110-120
+    float** Positions_110_120;
+    float** Texels_110_120; 
+    float** Normals_110_120;
+    int** Faces_110_120;
+
+    //g _120-130
+    float** Positions_120_130;
+    float** Texels_120_130; 
+    float** Normals_120_130;
+    int** Faces_120_130;
+
+    //g _130-140
+    float** Positions_130_140;
+    float** Texels_130_140; 
+    float** Normals_130_140;
+    int** Faces_130_140;
+
+    //g _140-150
+    float** Positions_140_150;
+    float** Texels_140_150; 
+    float** Normals_140_150;
+    int** Faces_140_150;
+
+    //g _150-160
+    float** Positions_150_160;
+    float** Texels_150_160; 
+    float** Normals_150_160;
+    int** Faces_150_160;
+
+    //g _160-170
+    float** Positions_160_170;
+    float** Texels_160_170; 
+    float** Normals_160_170;
+    int** Faces_160_170;
+
+    //g _170-180
+    float** Positions_170_180;
+    float** Texels_170_180; 
+    float** Normals_170_180;
+    int** Faces_170_180;
+
+    //g _180-190
+    float** Positions_180_190;
+    float** Texels_180_190; 
+    float** Normals_180_190;
+    int** Faces_180_190;
+}AFib1_Arrays;
+
+//AFib2 Array structure
+typedef struct AFib2_Arrays
+{
+    //g _010_140
+    float** Positions_010_140;
+    float** Texels_010_140; 
+    float** Normals_010_140;
+    int** Faces_010_140;
+
+    //g _030-040
+    float** Positions_030_040;
+    float** Texels_030_040; 
+    float** Normals_030_040;
+    int** Faces_030_040;
+
+    //g _040-050
+    float** Positions_040_050;
+    float** Texels_040_050; 
+    float** Normals_040_050;
+    int** Faces_040_050;
+
+    //g _050-060
+    float** Positions_050_060;
+    float** Texels_050_060; 
+    float** Normals_050_060;
+    int** Faces_050_060;
+
+    //g _060-070
+    float** Positions_060_070;
+    float** Texels_060_070; 
+    float** Normals_060_070;
+    int** Faces_060_070;
+
+    //g _070-080
+    float** Positions_070_080;
+    float** Texels_070_080; 
+    float** Normals_070_080;
+    int** Faces_070_080;
+
+    //g _080-090
+    float** Positions_080_090;
+    float** Texels_080_090; 
+    float** Normals_080_090;
+    int** Faces_080_090;
+
+    //g _090-100
+    float** Positions_090_100;
+    float** Texels_090_100; 
+    float** Normals_090_100;
+    int** Faces_090_100;
+
+    //g _100-110
+    float** Positions_100_110;
+    float** Texels_100_110; 
+    float** Normals_100_110;
+    int** Faces_100_110;
+
+    //g _110-120
+    float** Positions_110_120;
+    float** Texels_110_120; 
+    float** Normals_110_120;
+    int** Faces_110_120;
+
+    //g _120-130
+    float** Positions_120_130;
+    float** Texels_120_130; 
+    float** Normals_120_130;
+    int** Faces_120_130;
+
+    //g _130-140
+    float** Positions_130_140;
+    float** Texels_130_140; 
+    float** Normals_130_140;
+    int** Faces_130_140;
+
+    //g _140-150
+    float** Positions_140_150;
+    float** Texels_140_150; 
+    float** Normals_140_150;
+    int** Faces_140_150;
+
+    //g _150-160
+    float** Positions_150_160;
+    float** Texels_150_160; 
+    float** Normals_150_160;
+    int** Faces_150_160;
+
+    //g _160-170
+    float** Positions_160_170;
+    float** Texels_160_170; 
+    float** Normals_160_170;
+    int** Faces_160_170;
+
+    //g _170-180
+    float** Positions_170_180;
+    float** Texels_170_180; 
+    float** Normals_170_180;
+    int** Faces_170_180;
+
+    //g _180-190
+    float** Positions_180_190;
+    float** Texels_180_190; 
+    float** Normals_180_190;
+    int** Faces_180_190;
+}AFib2_Arrays;
+
+//AFib3 Array structure
+typedef struct AFib3_Arrays
+{
+    //g _010_140
+    float** Positions_010_140;
+    float** Texels_010_140; 
+    float** Normals_010_140;
+    int** Faces_010_140;
+
+    //g _030-040
+    float** Positions_030_040;
+    float** Texels_030_040; 
+    float** Normals_030_040;
+    int** Faces_030_040;
+
+    //g _040-050
+    float** Positions_040_050;
+    float** Texels_040_050; 
+    float** Normals_040_050;
+    int** Faces_040_050;
+
+    //g _050-060
+    float** Positions_050_060;
+    float** Texels_050_060; 
+    float** Normals_050_060;
+    int** Faces_050_060;
+
+    //g _060-070
+    float** Positions_060_070;
+    float** Texels_060_070; 
+    float** Normals_060_070;
+    int** Faces_060_070;
+
+    //g _070-080
+    float** Positions_070_080;
+    float** Texels_070_080; 
+    float** Normals_070_080;
+    int** Faces_070_080;
+
+    //g _080-090
+    float** Positions_080_090;
+    float** Texels_080_090; 
+    float** Normals_080_090;
+    int** Faces_080_090;
+
+    //g _090-100
+    float** Positions_090_100;
+    float** Texels_090_100; 
+    float** Normals_090_100;
+    int** Faces_090_100;
+
+    //g _100-110
+    float** Positions_100_110;
+    float** Texels_100_110; 
+    float** Normals_100_110;
+    int** Faces_100_110;
+
+    //g _110-120
+    float** Positions_110_120;
+    float** Texels_110_120; 
+    float** Normals_110_120;
+    int** Faces_110_120;
+
+    //g _120-130
+    float** Positions_120_130;
+    float** Texels_120_130; 
+    float** Normals_120_130;
+    int** Faces_120_130;
+
+    //g _130-140
+    float** Positions_130_140;
+    float** Texels_130_140; 
+    float** Normals_130_140;
+    int** Faces_130_140;
+
+    //g _140-150
+    float** Positions_140_150;
+    float** Texels_140_150; 
+    float** Normals_140_150;
+    int** Faces_140_150;
+
+    //g _150-160
+    float** Positions_150_160;
+    float** Texels_150_160; 
+    float** Normals_150_160;
+    int** Faces_150_160;
+
+    //g _160-170
+    float** Positions_160_170;
+    float** Texels_160_170; 
+    float** Normals_160_170;
+    int** Faces_160_170;
+
+    //g _170-180
+    float** Positions_170_180;
+    float** Texels_170_180; 
+    float** Normals_170_180;
+    int** Faces_170_180;
+
+    //g _180-190
+    float** Positions_180_190;
+    float** Texels_180_190; 
+    float** Normals_180_190;
+    int** Faces_180_190;
+}AFib3_Arrays;
+
+//Get the OBJ info
+Model GetOBJInfo(string value, string segmentStart, string segmentFinish)
+{
+	cout << "Get OBJ Info for " << value << " - " << segmentStart << endl;
+
+    Model model;
+
+    bool allowReading = false;
+
+    //input stream to open the file
+    ifstream stream;
+    stream.open(value);
+
+    //Check whether the file is corrupt or not
+    if(!stream.good())
+    {
+        cout << "File is corrupt or some error opening the OBJ file";
+        exit(1);
+    }
+
+    //Parse through the file and get the number of vertices, normals, faces and so on
+    while(!stream.eof())
+    {
+        string line;
+        getline(stream, line);
+
+        if(line.compare(segmentFinish) == 0)
+            break;  
+        else if(line.compare(segmentStart) == 0 || allowReading)
+        {
+            allowReading = true;
+
+            string type = line.substr(0, 2);
+
+            if(type.compare("v ") == 0)
+                model.positions++;
+            else if(type.compare("vt") == 0)
+                model.texels++;
+            else if(type.compare("vn") == 0)
+                model.normals++;
+            else if(type.compare("f ") == 0)
+                model.faces++;
+        }     
+    }
+
+    model.verticies = model.faces * 3;
+
+    stream.close();
+
+    return model;
+}
+
+//Get the obj Data
+void GetOBJData(string file, string segmentStart, string segmentFinish, float** positions, float** texels, float** normals, int** faces, Model model)
+{
+	cout << "Get OBJ data for " << file << " - " << segmentStart << endl;
+
+    int pCount, tCount, nCount, fCount = 0;
+
+    bool allowReading = false;
+
+    ifstream stream;
+    stream.open(file);
+
+    if(!stream.good())
+    {
+        cout << "File is corrupt or some error opening the OBJ file";
+        exit(1);
+    }
+
+    //Parse through the file and get the number of vertices, normals, faces and so on
+    while(!stream.eof())
+    {
+        string line;
+        getline(stream, line);
+
+        if(line.compare(segmentFinish) == 0)
+            break;
+        else if(line.compare(segmentStart) == 0 || allowReading)
+        {
+            string type = line.substr(0, 2);
+
+            if(type.compare("v ") == 0 && positions != NULL && pCount < model.positions)
+            {
+                //Copy the entire line
+                char* l = new char[line.size() + 1];
+                memcpy(l, line.c_str(), line.size() + 1);
+
+                strtok(l, " ");
+                for(int i = 0; i < 3; i++)
+                    positions[pCount][i] = atof(strtok(NULL, " "));
+
+                //deallocate the memory
+                delete[] l;
+                pCount++;
+            }
+
+            else if(type.compare("vt") == 0 && texels != NULL && tCount < model.texels)
+            {
+            	//Copy the entire line
+    			char* l = new char[line.size() + 1];
+    			memcpy(l, line.c_str(), line.size() + 1);
+
+    			strtok(l, " ");
+    			for(int i = 0; i < 2; i++)
+    				texels[tCount][i] = atof(strtok(NULL, " "));
+
+    			//deallocate the memory
+    			delete[] l;
+    			tCount++;
+            }
+
+            else if(type.compare("vn") == 0 && normals != NULL && nCount < model.normals)
+            {
+                //Copy the entire line
+                char* l = new char[line.size() + 1];
+                memcpy(l, line.c_str(), line.size() + 1);
+
+                strtok(l, " ");
+                for(int i = 0; i < 3; i++)
+                    normals[nCount][i] = atof(strtok(NULL, " "));
+
+                //deallocate the memory
+                delete[] l;
+                nCount++;
+            }
+
+            else if(type.compare("f ") == 0 && faces != NULL && fCount < model.faces)
+            {
+                //Copy the entire line
+                char* l = new char[line.size() + 1];
+                memcpy(l, line.c_str(), line.size() + 1);
+
+                strtok(l, " ");
+                for(int i = 0; i < 6; i++)
+                    faces[fCount][i] = atof(strtok(NULL, " //"));
+
+                //deallocate the memory
+                delete[] l;
+                fCount++;
+            }
+        }
+    }
+
+    stream.close();
+
+}
+
+//Assigning the AFib1 array segments
+AFib1_Arrays AssignAFib1ArraySegment(AFib1_Arrays AFib1, string fileOBJSegment, float** positions, float** texels, float** normals, int** faces)
+{
+    if(fileOBJSegment == "g _010_140")
+    {
+        AFib1.Positions_010_140 = positions;
+        AFib1.Texels_010_140 = texels;
+        AFib1.Normals_010_140 = normals;
+        AFib1.Faces_010_140 = faces;
+    }
+    else if(fileOBJSegment == "g _030-040")
+    {
+        AFib1.Positions_030_040 = positions;
+        AFib1.Texels_030_040 = texels;
+        AFib1.Normals_030_040 = normals;
+        AFib1.Faces_030_040 = faces;
+    }
+    else if(fileOBJSegment == "g _040-050")
+    {
+        AFib1.Positions_040_050 = positions;
+        AFib1.Texels_040_050 = texels;
+        AFib1.Normals_040_050 = normals;
+        AFib1.Faces_040_050 = faces;
+    }
+    else if(fileOBJSegment == "g _050-060")
+    {
+        AFib1.Positions_050_060 = positions;
+        AFib1.Texels_050_060 = texels;
+        AFib1.Normals_050_060 = normals;
+        AFib1.Faces_050_060 = faces;
+    }
+    else if(fileOBJSegment == "g _060-070")
+    {
+        AFib1.Positions_060_070 = positions;
+        AFib1.Texels_060_070 = texels;
+        AFib1.Normals_060_070 = normals;
+        AFib1.Faces_060_070 = faces;
+    }
+    else if(fileOBJSegment == "g _070-080")
+    {
+        AFib1.Positions_070_080 = positions;
+        AFib1.Texels_070_080 = texels;
+        AFib1.Normals_070_080 = normals;
+        AFib1.Faces_070_080 = faces;
+    }
+    else if(fileOBJSegment == "g _080-090")
+    {
+        AFib1.Positions_080_090 = positions;
+        AFib1.Texels_080_090 = texels;
+        AFib1.Normals_080_090 = normals;
+        AFib1.Faces_080_090 = faces;
+    }
+    else if(fileOBJSegment == "g _090-100")
+    {
+        AFib1.Positions_090_100 = positions;
+        AFib1.Texels_090_100 = texels;
+        AFib1.Normals_090_100 = normals;
+        AFib1.Faces_090_100 = faces;
+    }
+    else if(fileOBJSegment == "g _100-110")
+    {
+        AFib1.Positions_100_110 = positions;
+        AFib1.Texels_100_110 = texels;
+        AFib1.Normals_100_110 = normals;
+        AFib1.Faces_100_110 = faces;
+    }
+    else if(fileOBJSegment == "g _110-120")
+    {
+        AFib1.Positions_110_120 = positions;
+        AFib1.Texels_110_120 = texels;
+        AFib1.Normals_110_120 = normals;
+        AFib1.Faces_110_120 = faces;
+    }
+    else if(fileOBJSegment == "g _120-130")
+    {
+        AFib1.Positions_120_130 = positions;
+        AFib1.Texels_120_130 = texels;
+        AFib1.Normals_120_130 = normals;
+        AFib1.Faces_120_130 = faces;
+    }
+    else if(fileOBJSegment == "g _130-140")
+    {
+        AFib1.Positions_130_140 = positions;
+        AFib1.Texels_130_140 = texels;
+        AFib1.Normals_130_140 = normals;
+        AFib1.Faces_130_140 = faces;
+    }
+    else if(fileOBJSegment == "g _140-150")
+    {
+        AFib1.Positions_140_150 = positions;
+        AFib1.Texels_140_150 = texels;
+        AFib1.Normals_140_150 = normals;
+        AFib1.Faces_140_150 = faces;
+    }
+    else if(fileOBJSegment == "g _150-160")
+    {
+        AFib1.Positions_150_160 = positions;
+        AFib1.Texels_150_160 = texels;
+        AFib1.Normals_150_160 = normals;
+        AFib1.Faces_150_160 = faces;
+    }
+    else if(fileOBJSegment == "g _160-170")
+    {
+        AFib1.Positions_160_170 = positions;
+        AFib1.Texels_160_170 = texels;
+        AFib1.Normals_160_170 = normals;
+        AFib1.Faces_160_170 = faces;
+    }
+    else if(fileOBJSegment == "g _170-180")
+    {
+        AFib1.Positions_170_180 = positions;
+        AFib1.Texels_170_180 = texels;
+        AFib1.Normals_170_180 = normals;
+        AFib1.Faces_170_180 = faces;
+    }
+    else if(fileOBJSegment == "g _180-190")
+    {
+        AFib1.Positions_180_190 = positions;
+        AFib1.Texels_180_190 = texels;
+        AFib1.Normals_180_190 = normals;
+        AFib1.Faces_180_190 = faces;
+    }
+
+    return AFib1;
+}
+
+//Assigning the AFib2 array segments
+AFib2_Arrays AssignAFib2ArraySegment(AFib2_Arrays AFib2, string fileOBJSegment, float** positions, float** texels, float** normals, int** faces)
+{
+    if(fileOBJSegment == "g _010_140")
+    {
+        AFib2.Positions_010_140 = positions;
+        AFib2.Texels_010_140 = texels;
+        AFib2.Normals_010_140 = normals;
+        AFib2.Faces_010_140 = faces;
+    }
+    else if(fileOBJSegment == "g _030-040")
+    {
+        AFib2.Positions_030_040 = positions;
+        AFib2.Texels_030_040 = texels;
+        AFib2.Normals_030_040 = normals;
+        AFib2.Faces_030_040 = faces;
+    }
+    else if(fileOBJSegment == "g _040-050")
+    {
+        AFib2.Positions_040_050 = positions;
+        AFib2.Texels_040_050 = texels;
+        AFib2.Normals_040_050 = normals;
+        AFib2.Faces_040_050 = faces;
+    }
+    else if(fileOBJSegment == "g _050-060")
+    {
+        AFib2.Positions_050_060 = positions;
+        AFib2.Texels_050_060 = texels;
+        AFib2.Normals_050_060 = normals;
+        AFib2.Faces_050_060 = faces;
+    }
+    else if(fileOBJSegment == "g _060-070")
+    {
+        AFib2.Positions_060_070 = positions;
+        AFib2.Texels_060_070 = texels;
+        AFib2.Normals_060_070 = normals;
+        AFib2.Faces_060_070 = faces;
+    }
+    else if(fileOBJSegment == "g _070-080")
+    {
+        AFib2.Positions_070_080 = positions;
+        AFib2.Texels_070_080 = texels;
+        AFib2.Normals_070_080 = normals;
+        AFib2.Faces_070_080 = faces;
+    }
+    else if(fileOBJSegment == "g _080-090")
+    {
+        AFib2.Positions_080_090 = positions;
+        AFib2.Texels_080_090 = texels;
+        AFib2.Normals_080_090 = normals;
+        AFib2.Faces_080_090 = faces;
+    }
+    else if(fileOBJSegment == "g _090-100")
+    {
+        AFib2.Positions_090_100 = positions;
+        AFib2.Texels_090_100 = texels;
+        AFib2.Normals_090_100 = normals;
+        AFib2.Faces_090_100 = faces;
+    }
+    else if(fileOBJSegment == "g _100-110")
+    {
+        AFib2.Positions_100_110 = positions;
+        AFib2.Texels_100_110 = texels;
+        AFib2.Normals_100_110 = normals;
+        AFib2.Faces_100_110 = faces;
+    }
+    else if(fileOBJSegment == "g _110-120")
+    {
+        AFib2.Positions_110_120 = positions;
+        AFib2.Texels_110_120 = texels;
+        AFib2.Normals_110_120 = normals;
+        AFib2.Faces_110_120 = faces;
+    }
+    else if(fileOBJSegment == "g _120-130")
+    {
+        AFib2.Positions_120_130 = positions;
+        AFib2.Texels_120_130 = texels;
+        AFib2.Normals_120_130 = normals;
+        AFib2.Faces_120_130 = faces;
+    }
+    else if(fileOBJSegment == "g _130-140")
+    {
+        AFib2.Positions_130_140 = positions;
+        AFib2.Texels_130_140 = texels;
+        AFib2.Normals_130_140 = normals;
+        AFib2.Faces_130_140 = faces;
+    }
+    else if(fileOBJSegment == "g _140-150")
+    {
+        AFib2.Positions_140_150 = positions;
+        AFib2.Texels_140_150 = texels;
+        AFib2.Normals_140_150 = normals;
+        AFib2.Faces_140_150 = faces;
+    }
+    else if(fileOBJSegment == "g _150-160")
+    {
+        AFib2.Positions_150_160 = positions;
+        AFib2.Texels_150_160 = texels;
+        AFib2.Normals_150_160 = normals;
+        AFib2.Faces_150_160 = faces;
+    }
+    else if(fileOBJSegment == "g _160-170")
+    {
+        AFib2.Positions_160_170 = positions;
+        AFib2.Texels_160_170 = texels;
+        AFib2.Normals_160_170 = normals;
+        AFib2.Faces_160_170 = faces;
+    }
+    else if(fileOBJSegment == "g _170-180")
+    {
+        AFib2.Positions_170_180 = positions;
+        AFib2.Texels_170_180 = texels;
+        AFib2.Normals_170_180 = normals;
+        AFib2.Faces_170_180 = faces;
+    }
+    else if(fileOBJSegment == "g _180-190")
+    {
+        AFib2.Positions_180_190 = positions;
+        AFib2.Texels_180_190 = texels;
+        AFib2.Normals_180_190 = normals;
+        AFib2.Faces_180_190 = faces;
+    }
+
+    return AFib2;
+}
+
+//Assigning the AFib3 array segments
+AFib3_Arrays AssignAFib3ArraySegment(AFib3_Arrays AFib3, string fileOBJSegment, float** positions, float** texels, float** normals, int** faces)
+{
+    if(fileOBJSegment == "g _010_140")
+    {
+        AFib3.Positions_010_140 = positions;
+        AFib3.Texels_010_140 = texels;
+        AFib3.Normals_010_140 = normals;
+        AFib3.Faces_010_140 = faces;
+    }
+    else if(fileOBJSegment == "g _030-040")
+    {
+        AFib3.Positions_030_040 = positions;
+        AFib3.Texels_030_040 = texels;
+        AFib3.Normals_030_040 = normals;
+        AFib3.Faces_030_040 = faces;
+    }
+    else if(fileOBJSegment == "g _040-050")
+    {
+        AFib3.Positions_040_050 = positions;
+        AFib3.Texels_040_050 = texels;
+        AFib3.Normals_040_050 = normals;
+        AFib3.Faces_040_050 = faces;
+    }
+    else if(fileOBJSegment == "g _050-060")
+    {
+        AFib3.Positions_050_060 = positions;
+        AFib3.Texels_050_060 = texels;
+        AFib3.Normals_050_060 = normals;
+        AFib3.Faces_050_060 = faces;
+    }
+    else if(fileOBJSegment == "g _060-070")
+    {
+        AFib3.Positions_060_070 = positions;
+        AFib3.Texels_060_070 = texels;
+        AFib3.Normals_060_070 = normals;
+        AFib3.Faces_060_070 = faces;
+    }
+    else if(fileOBJSegment == "g _070-080")
+    {
+        AFib3.Positions_070_080 = positions;
+        AFib3.Texels_070_080 = texels;
+        AFib3.Normals_070_080 = normals;
+        AFib3.Faces_070_080 = faces;
+    }
+    else if(fileOBJSegment == "g _080-090")
+    {
+        AFib3.Positions_080_090 = positions;
+        AFib3.Texels_080_090 = texels;
+        AFib3.Normals_080_090 = normals;
+        AFib3.Faces_080_090 = faces;
+    }
+    else if(fileOBJSegment == "g _090-100")
+    {
+        AFib3.Positions_090_100 = positions;
+        AFib3.Texels_090_100 = texels;
+        AFib3.Normals_090_100 = normals;
+        AFib3.Faces_090_100 = faces;
+    }
+    else if(fileOBJSegment == "g _100-110")
+    {
+        AFib3.Positions_100_110 = positions;
+        AFib3.Texels_100_110 = texels;
+        AFib3.Normals_100_110 = normals;
+        AFib3.Faces_100_110 = faces;
+    }
+    else if(fileOBJSegment == "g _110-120")
+    {
+        AFib3.Positions_110_120 = positions;
+        AFib3.Texels_110_120 = texels;
+        AFib3.Normals_110_120 = normals;
+        AFib3.Faces_110_120 = faces;
+    }
+    else if(fileOBJSegment == "g _120-130")
+    {
+        AFib3.Positions_120_130 = positions;
+        AFib3.Texels_120_130 = texels;
+        AFib3.Normals_120_130 = normals;
+        AFib3.Faces_120_130 = faces;
+    }
+    else if(fileOBJSegment == "g _130-140")
+    {
+        AFib3.Positions_130_140 = positions;
+        AFib3.Texels_130_140 = texels;
+        AFib3.Normals_130_140 = normals;
+        AFib3.Faces_130_140 = faces;
+    }
+    else if(fileOBJSegment == "g _140-150")
+    {
+        AFib3.Positions_140_150 = positions;
+        AFib3.Texels_140_150 = texels;
+        AFib3.Normals_140_150 = normals;
+        AFib3.Faces_140_150 = faces;
+    }
+    else if(fileOBJSegment == "g _150-160")
+    {
+        AFib3.Positions_150_160 = positions;
+        AFib3.Texels_150_160 = texels;
+        AFib3.Normals_150_160 = normals;
+        AFib3.Faces_150_160 = faces;
+    }
+    else if(fileOBJSegment == "g _160-170")
+    {
+        AFib3.Positions_160_170 = positions;
+        AFib3.Texels_160_170 = texels;
+        AFib3.Normals_160_170 = normals;
+        AFib3.Faces_160_170 = faces;
+    }
+    else if(fileOBJSegment == "g _170-180")
+    {
+        AFib3.Positions_170_180 = positions;
+        AFib3.Texels_170_180 = texels;
+        AFib3.Normals_170_180 = normals;
+        AFib3.Faces_170_180 = faces;
+    }
+    else if(fileOBJSegment == "g _180-190")
+    {
+        AFib3.Positions_180_190 = positions;
+        AFib3.Texels_180_190 = texels;
+        AFib3.Normals_180_190 = normals;
+        AFib3.Faces_180_190 = faces;
+    }
+
+    return AFib3;
+}
+
+int main(int argc, const char * argv[])
+{
+    int fileCounter, segmentCounter = 0;
+
+    bool isPositions, isTexels, isNormals, isFaces = false;
+
+    Model model;
+
+    //OBJ file arrays
+    AFib1_Arrays AFib1;
+    AFib2_Arrays AFib2;
+    AFib3_Arrays AFib3;
+
+    //Creating file setup
+    string sourceNames[] = {"AFib1", "AFib2", "AFib3"};
+    string sourceOBJSegments[] = {"g _010_140", "g _030-040", "g _040-050", "g _050-060", "g _060-070", "g _070-080", "g _080-090", "g _090-100", "g _100-110", "g _110-120", "g _120-130", "g _130-140", "g _140-150", "g _150-160", "g _160-170", "g _170-180", "g _180-190"};
+    string name, fileOBJPath, fileOBJSegmentStart, fileOBJSegmentFinish;
+
+    while(fileCounter < 1)
+    {
+        name = sourceNames[fileCounter];
+        fileOBJPath = "source/" + name + ".obj";
+
+        while(segmentCounter < 17)
+        {
+            fileOBJSegmentStart = sourceOBJSegments[segmentCounter];
+
+            if(segmentCounter == 16)
+                fileOBJSegmentFinish = "End";
+            else
+                fileOBJSegmentFinish = sourceOBJSegments[segmentCounter + 1];
+                
+
+            model = GetOBJInfo(fileOBJPath, fileOBJSegmentStart, fileOBJSegmentFinish);
+
+            //check to see the numbers
+            cout << "OBJ Info" << endl;
+            cout << "Positions: " << model.positions << endl;
+            cout << "Texels: " << model.texels << endl;
+            cout << "Normals: " << model.normals << endl;
+            cout << "Faces: " << model.faces << endl;
+            cout << "Vertices: " << model.verticies << endl;
+            cout <<"\n" <<endl;
+
+            //delcare the arrary based on the model data
+            if(model.positions != 0 && model.texels != 0 && model.normals != 0 && model.faces != 0 && model.verticies != 0)
+            {
+                isPositions, isTexels, isNormals, isFaces = true;
+
+            	cout << "Got all data \n" << endl;
+
+                float** positions = new float*[model.positions]; //each coordinate in XYZ space
+                for(int i = 0; i < model.positions; i++)
+                {
+                    positions[i] = new float[3];
+                    for(int j = 0; j < 3; j++)
+                    {
+                        positions[i][j] = rand() % (9 - 0 + 1) + 0;
+                    }
+
+                }
+
+                float** texels = new float*[model.texels]; //UV coordinates
+                for(int i = 0; i < model.texels; i++)
+                {
+                    texels[i] = new float[2];
+                    for(int j = 0; j < 2; j++)
+                    {
+                        texels[i][j] = rand() % (9 - 0 + 1) + 0;
+                    }
+                }
+
+                float** normals = new float*[model.normals]; //normal vector
+                for(int i = 0; i < model.normals; i++)
+                {
+                    normals[i] = new float[3];
+                    for(int j = 0; j < 3; j++)
+                    {
+                        normals[i][j] = rand() % (9 - 0 + 1) + 0;
+                    }
+                }
+
+                int** faces = new int*[model.faces];
+                for(int i = 0; i < model.faces; i++)
+                {
+                    faces[i] = new int[6];
+                    for(int j = 0; j < 6; j++)
+                    {
+                        faces[i][j] = rand() % (9 - 0 + 1) + 0;
+                    }
+                }
+
+            	GetOBJData(fileOBJPath, fileOBJSegmentStart, fileOBJSegmentFinish, positions, texels, normals, faces, model); 
+
+                //Check to see correctness of the data -- Checking the first entry
+                cout << "Model Data" << endl;
+                cout << "Position: " << positions[0][0] << "x " << positions[0][1] << "y " << positions[0][2] << "z" << endl;
+                cout << "Texels: " << texels[0][0] << "u " << texels[0][1] << "v " << endl;
+                cout << "Normals: " << normals[0][0] << "x " << normals[0][1] << "y " << normals[0][2] << "z" << endl;
+                cout << "Faces: "<< faces[0][0] << "p " << faces[0][1] << "t " << faces[0][2] << "n" << endl;
+                cout <<"\n" <<endl;
+
+                //Assign values to the global arrays to compute average coordinates
+                if(name == "AFib1")
+                {
+                    AFib1 = AssignAFib1ArraySegment(AFib1, fileOBJSegmentStart, positions, texels, normals, faces);
+                }
+                else if(name == "AFib2")
+                {
+                    AFib2 = AssignAFib2ArraySegment(AFib2, fileOBJSegmentStart, positions, texels, normals, faces);
+                }
+                else if(name == "AFib3")
+                {
+                    AFib3 = AssignAFib3ArraySegment(AFib3, fileOBJSegmentStart, positions, texels, normals, faces);
+                }
+
+                //Deallocate the memory spaces
+                for(int i = 0; i < model.positions; i++)
+                {
+                    delete[] positions[i];
+                }
+                delete[] positions;
+
+                for(int i = 0; i < model.texels; i++)
+                {
+                    delete[] texels[i];
+                }
+                delete[] texels;
+
+                for(int i = 0; i < model.normals; i++)
+                {
+                    delete[] normals[i];
+                }
+                delete[] normals;
+
+                for(int i = 0; i < model.faces; i++)
+                {
+                    delete[] faces[i];
+                }
+                delete[] faces;
+            }
+            else if(model.positions != 0 && model.texels != 0 && model.faces != 0)
+            {
+                isPositions, isTexels, isFaces = true;
+
+            	cout << "Missing normals \n" << endl;
+
+                float** positions = new float*[model.positions]; //each coordinate in XYZ space
+                for(int i = 0; i < model.positions; i++)
+                {
+                    positions[i] = new float[3];
+                    for(int j = 0; j < 3; j++)
+                    {
+                        positions[i][j] = rand() % (9 - 0 + 1) + 0;
+                    }
+
+                }
+
+            	float** texels = new float*[model.texels]; //UV coordinates
+                for(int i = 0; i < model.texels; i++)
+                {
+                    texels[i] = new float[2];
+                    for(int j = 0; j < 2; j++)
+                    {
+                        texels[i][j] = rand() % (9 - 0 + 1) + 0;
+                    }
+                }
+
+            	int** faces = new int*[model.faces];
+                for(int i = 0; i < model.faces; i++)
+                {
+                    faces[i] = new int[6];
+                    for(int j = 0; j < 6; j++)
+                    {
+                        faces[i][j] = rand() % (9 - 0 + 1) + 0;
+                    }
+                }
+
+            	GetOBJData(fileOBJPath, fileOBJSegmentStart, fileOBJSegmentFinish, positions, texels, NULL, faces, model); 
+
+            	//Check to see correctness of the data -- Checking the first entry
+        		cout << "Model Data" << endl;
+        		cout << "Position: " << positions[0][0] << "x " << positions[0][1] << "y " << positions[0][2] << "z" << endl;
+        		cout << "Texels: " << texels[0][0] << "u " << texels[0][1] << "v " << endl;
+        		cout << "Faces: "<< faces[0][0] << "p " << faces[0][1] << "t " << faces[0][2] << "n" << endl;
+        		cout <<"\n" <<endl;
+
+                //Assign values to the global arrays to compute average coordinates
+                if(name == "AFib1")
+                {
+                    AFib1 = AssignAFib1ArraySegment(AFib1, fileOBJSegmentStart, positions, texels, NULL, faces);
+                }
+                else if(name == "AFib2")
+                {
+                    AFib2 = AssignAFib2ArraySegment(AFib2, fileOBJSegmentStart, positions, texels, NULL, faces);
+                }
+                else if(name == "AFib3")
+                {
+                    AFib3 = AssignAFib3ArraySegment(AFib3, fileOBJSegmentStart, positions, texels, NULL, faces);
+                }
+
+
+                //Deallocate the memory spaces
+                for(int i = 0; i < model.positions; i++)
+                {
+                    delete[] positions[i];
+                }
+                delete[] positions;
+
+                for(int i = 0; i < model.texels; i++)
+                {
+                    delete[] texels[i];
+                }
+                delete[] texels;
+
+                for(int i = 0; i < model.faces; i++)
+                {
+                    delete[] faces[i];
+                }
+                delete[] faces;
+
+            }
+            else if(model.positions != 0 && model.normals != 0 && model.faces != 0)
+            {
+                isPositions, isNormals, isFaces = true;
+
+            	cout << "Missing texels \n" << endl;
+
+                float** positions = new float*[model.positions]; //each coordinate in XYZ space
+                for(int i = 0; i < model.positions; i++)
+                {
+                    positions[i] = new float[3];
+                    for(int j = 0; j < 3; j++)
+                    {
+                        positions[i][j] = rand() % (9 - 0 + 1) + 0;
+                    }
+
+                }
+
+                float** normals = new float*[model.normals]; //normal vector
+                for(int i = 0; i < model.normals; i++)
+                {
+                    normals[i] = new float[3];
+                    for(int j = 0; j < 3; j++)
+                    {
+                        normals[i][j] = rand() % (9 - 0 + 1) + 0;
+                    }
+                }
+
+                int** faces = new int*[model.faces];
+                for(int i = 0; i < model.faces; i++)
+                {
+                    faces[i] = new int[6];
+                    for(int j = 0; j < 6; j++)
+                    {
+                        faces[i][j] = rand() % (9 - 0 + 1) + 0;
+                    }
+                }
+
+        		GetOBJData(fileOBJPath, fileOBJSegmentStart, fileOBJSegmentFinish, positions, NULL, normals, faces, model);  
+
+        		//Check to see correctness of the data -- Checking the first entry
+        		cout << "Model Data" << endl;
+        		cout << "Position: " << positions[0][0] << "x " << positions[0][1] << "y " << positions[0][2] << "z" << endl;
+        		cout << "Normals: " << normals[0][0] << "x " << normals[0][1] << "y " << normals[0][2] << "z" << endl;
+        		cout << "Faces: "<< faces[0][0] << "p " << faces[0][1] << "t " << faces[0][2] << "n" << endl;
+        		cout <<"\n" <<endl;
+
+                //Assign values to the global arrays to compute average coordinates
+                if(name == "AFib1")
+                {
+                    AFib1 = AssignAFib1ArraySegment(AFib1, fileOBJSegmentStart, positions, NULL, normals, faces);
+                }
+                else if(name == "AFib2")
+                {
+                    AFib2 = AssignAFib2ArraySegment(AFib2, fileOBJSegmentStart, positions, NULL, normals, faces);
+                }
+                else if(name == "AFib3")
+                {
+                    AFib3 = AssignAFib3ArraySegment(AFib3, fileOBJSegmentStart, positions, NULL, normals, faces);
+                }
+
+                //Deallocate the memory spaces
+                for(int i = 0; i < model.positions; i++)
+                {
+                    delete[] positions[i];
+                }
+                delete[] positions;
+
+                for(int i = 0; i < model.normals; i++)
+                {
+                    delete[] normals[i];
+                }
+                delete[] normals;
+
+                for(int i = 0; i < model.faces; i++)
+                {
+                    delete[] faces[i];
+                }
+                delete[] faces;
+            }
+
+            segmentCounter++;
+        }
+
+        segmentCounter = 0;
+        fileCounter++;
+    }
+
+    return 0;
+}
+
